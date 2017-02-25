@@ -2,25 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using UnityEngine;
 
 
 namespace AR.Core.Graph
 {
 
-    public class Graph
+    public class Graph : MonoBehaviour, IUnityVisualProperties
     {
         public Dictionary<UInt32, Node> AllNodes { get; set; }
         public Dictionary<UInt32, Edge> AllEdges { get; set; }
-        public GraphSqlite FlatGraph;
+        public GraphSqlite FlatGraph { get; set; }
+
+        //From IUnityVisualProps
+
+        public Color myColor { get; set; }
+        public Mesh myMesh { get; set; }
+        public Material myMaterial { get; set; }
+        public Vector3 myLocation { get; set; }
+        public Vector3 myRotation { get; set; }
+        public Vector3 myScale { get; set; }
+        public float mySize { get; set; }
+
+
 
         public Graph()
         {
             AllNodes = new Dictionary<UInt32, Node>();
             AllEdges = new Dictionary<UInt32, Edge>();
             FlatGraph = new GraphSqlite();
-          
-
         }
 
 
@@ -28,31 +38,28 @@ namespace AR.Core.Graph
 
         public Node AddNodes(String Label = "", UnityVisualProperties opVisProp = null)
         {
-            var node = new Node() { Label = Label };
+            GameObject tmpGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            tmpGo.name = "NODE_" + (Globals.ID_NodesUsed + 1).ToString();
+            tmpGo.AddComponent<MeshFilter>();
+            tmpGo.AddComponent<MeshRenderer>();
+            tmpGo.GetComponent<MeshRenderer>().material.color = Visuals.Colors.Blue;
 
-            if (opVisProp == null)
-            {
-                node.myColor = Visuals.Colors.Grey;
-                node.myMaterial = opVisProp.myMaterial;
-                node.myMesh = opVisProp.myMesh;
-            }
-            else
-            {
-                node.myColor = opVisProp.myColor;
-                node.myMaterial = opVisProp.myMaterial;
-                node.myMesh = opVisProp.myMesh;
-            }
+            var node = new Node(tmpGo);
+
+
+            //Destroy(tmpSphere);
+
 
             AllNodes.Add(node.ID, node);
             FlatGraph.addNode(node);
             return node;
-
-
-
         }
         public void DeleteNode(UInt32 ID)
         {
             var node = GetNode(ID);
+
+            Destroy(node.myARObject);
+
             foreach (var ed in node.EdgesIn)
             {
                 DeleteEdges(ed.Key);

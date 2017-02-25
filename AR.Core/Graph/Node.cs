@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AR.Core.Graph
 {
 
-    public class Node : MonoBehaviour, IUnityVisualProperties
+    public class Node 
     {
         private UInt32 _ID;
         public UInt32 ID
@@ -50,23 +50,76 @@ namespace AR.Core.Graph
             }
         }
 
-        //From IUnityVisualProps
-        public Color myColor { get; set; }
-        public Mesh myMesh { get; set; }
-        public Material myMaterial { get; set; }
-        public Vector3 myLocation { get; set; }
-        public Vector3 myRotation { get; set; }
-        public Vector3 myScale { get; set; }
-        public float mySize { get; set; }
+        public GameObject myARObject;
 
 
-
-        public Node()
+        public Node(GameObject myARObject)
         {
             ID = ++ Globals.ID_NodesUsed;
             Properties = new Dictionary<string, object>();
             EdgesOut = new Dictionary<uint, Edge>();
             EdgesIn = new Dictionary<uint, Edge>();
+            this.myARObject = myARObject;
+        }
+
+        //Movement of nodes
+        public Node MoveTo(Vector3 vec)
+        {
+            myARObject.transform.position = vec;
+            return this;
+
+        }
+        public Node MoveDelta(Vector3 vec)
+        {
+            var curLoc = myARObject.transform.position;
+            myARObject.transform.position = new Vector3(vec.x + curLoc.x, vec.y + curLoc.y, vec.z + curLoc.z);
+            return this;
+
+        }
+        public Node Scale(Vector3 vec)
+        {
+            myARObject.transform.localScale = vec;
+            return this;
+
+        }
+        public Node MoveTo(float x, float y, float z)
+        {
+            Vector3 vec = new Vector3(x, y, z);
+            myARObject.transform.position = vec;
+            return this;
+
+        }
+        public Node MoveDelta(float x, float y, float z)
+        {
+            Vector3 vec = new Vector3(x, y, z);
+            var curLoc = myARObject.transform.position;
+            myARObject.transform.position = new Vector3(vec.x + curLoc.x, vec.y + curLoc.y, vec.z + curLoc.z);
+            return this;
+
+        }
+        public Node Scale(float x, float y, float z)
+        {
+            Vector3 vec = new Vector3(x, y, z);
+            myARObject.transform.localScale = vec;
+            return this;
+
+        }
+        public Node EvenlyScale(float evenly)
+        {
+            Vector3 vec = new Vector3(evenly, evenly, evenly);
+            myARObject.transform.localScale = vec;
+            return this;
+
+        }
+        public Node ChangeNodeColor(Visuals.Colors c)
+        {
+            myARObject.GetComponent<MeshRenderer>().material.color = c.myColor;
+            return this;
+        }
+        public Node ChangeNodeColor(Color c)
+        {
+            myARObject.GetComponent<MeshRenderer>().material.color = c;
+            return this;
         }
 
     }

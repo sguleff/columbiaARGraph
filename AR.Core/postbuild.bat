@@ -1,0 +1,2 @@
+xcopy C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Release\AR.Core.dll C:\Users\SGULEFF\Documents\Unity Projects\HelloHolograms\Assets\AR.Core.dll
+xcopy C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Release\AR.Core.pdb C:\Users\SGULEFF\Documents\Unity Projects\HelloHolograms\Assets\AR.Core.pdb

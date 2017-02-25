@@ -1,0 +1,40 @@
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\EntityFramework.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\System.Data.SQLite.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\UnityEngine.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\EntityFramework.xml
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\System.Data.SQLite.xml
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\UnityEngine.xml
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\AR.Core.dll.config
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\AR.Core.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\bin\Debug\AR.Core.pdb
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\obj\Debug\AR.Core.csprojResolveAssemblyReference.cache
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\obj\Debug\AR.Core.dll
+C:\Users\SGULEFF\Documents\Unity Projects\Sam.Core\obj\Debug\AR.Core.pdb
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\obj\Debug\AR.Core.csprojResolveAssemblyReference.cache
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\AR.Core.dll.config
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\AR.Core.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\AR.Core.pdb
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\System.Data.SQLite.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\UnityEditor.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\UnityEngine.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\EntityFramework.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Mono.Cecil.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Unity.SerializationLogic.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Unity.DataContract.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\ICSharpCode.NRefactory.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Unity.UNetWeaver.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Unity.CecilTools.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Mono.Cecil.Pdb.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\Mono.Cecil.Mdb.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\System.Data.SQLite.xml
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\UnityEditor.xml
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\UnityEngine.xml
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\bin\Debug\EntityFramework.xml
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\obj\Debug\AR.Core.dll
+C:\Users\SGULEFF\Documents\Main\c#\Unity\AR.Core\obj\Debug\AR.Core.pdb

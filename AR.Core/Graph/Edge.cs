@@ -20,8 +20,10 @@ namespace AR.Core.Graph
         //From IUnityVisualProps
         public Color myColor { get; set; }
         public Mesh myMesh { get; set; }
-        public  Material myMaterial { get; set; }
+        public Material myMaterial { get; set; }
         public Vector3 myLocation { get; set; }
+        public Vector3 myRotation { get; set; }
+        public Vector3 myScale { get; set; }
         public float mySize { get; set; }
 
 
