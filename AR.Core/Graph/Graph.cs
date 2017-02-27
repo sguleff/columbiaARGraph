@@ -10,7 +10,7 @@ namespace AR.Core.Graph
 
     public class Graph : MonoBehaviour, IUnityVisualProperties
     {
-        public Dictionary<UInt32, Node> AllNodes { get; set; }
+        public Dictionary<String, Node> AllNodes { get; set; }
         public Dictionary<UInt32, Edge> AllEdges { get; set; }
         public GraphSqlite FlatGraph { get; set; }
 
@@ -28,35 +28,28 @@ namespace AR.Core.Graph
 
         public Graph()
         {
-            AllNodes = new Dictionary<UInt32, Node>();
+            AllNodes = new Dictionary<String, Node>();
             AllEdges = new Dictionary<UInt32, Edge>();
             FlatGraph = new GraphSqlite();
         }
 
 
         //this handles all the node select, add, remove commands a user would need
-
+     
         public Node AddNodes(String Label = "", UnityVisualProperties opVisProp = null)
         {
-            GameObject tmpGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            tmpGo.name = "NODE_" + (Globals.ID_NodesUsed + 1).ToString();
-            tmpGo.AddComponent<MeshFilter>();
-            tmpGo.AddComponent<MeshRenderer>();
-            tmpGo.GetComponent<MeshRenderer>().material.color = Visuals.Colors.Blue;
+            var go = Visuals.UnityHelperFunctions.CreateGameObject(Types.GraphProperties.Node, 
+                PrimitiveType.Sphere, Visuals.Colors.Blue);
 
-            var node = new Node(tmpGo);
+            var node = new Node(go, Label);
 
-
-            //Destroy(tmpSphere);
-
-
-            AllNodes.Add(node.ID, node);
+            AllNodes.Add(node.UserID, node);
             FlatGraph.addNode(node);
             return node;
         }
-        public void DeleteNode(UInt32 ID)
+        public void DeleteNode(String UserID)
         {
-            var node = GetNode(ID);
+            var node = GetNode(UserID);
 
             Destroy(node.myARObject);
 
@@ -70,16 +63,16 @@ namespace AR.Core.Graph
             }
 
             FlatGraph.deleteNodes(node);
-            AllNodes.Remove(ID);
+            AllNodes.Remove(UserID);
         }
-        public Node GetNode(UInt32 ID)
+        public Node GetNode(String UserID)
         {
-            return AllNodes[ID];
+            return AllNodes[UserID];
         }
-        public List<Node> GetNodes(List<UInt32> IDS)
+        public List<Node> GetNodes(List<String> UserIDS)
         {
             var retList = new List<Node>();
-            foreach (var ID in IDS)
+            foreach (var ID in UserIDS)
             {
                 retList.Add(GetNode(ID));
 
@@ -92,7 +85,7 @@ namespace AR.Core.Graph
             var retList = new List<Node>();
             foreach (var ID in FlatGraph.getNodeList(SelectStatement))
             {
-                retList.Add(GetNode(Convert.ToUInt32(ID)));
+                retList.Add(GetNode(ID.ToString()));
 
             }
             return retList;
@@ -103,7 +96,10 @@ namespace AR.Core.Graph
 
         public Edge AddEdges(Node StartNode, Node EndNode, String Label = "")
         {
-            var edge = new Edge() { Label = Label };
+            GameObject go = Visuals.UnityHelperFunctions.CreateGameObject(Types.GraphProperties.Edge,
+                PrimitiveType.Cube, Visuals.Colors.Green);
+
+            var edge = new Edge(go) { Label = Label };
             edge.StartNode = StartNode;
             edge.EndNode = EndNode;
             StartNode.EdgesOut.Add(edge.ID, edge);
@@ -147,7 +143,23 @@ namespace AR.Core.Graph
             return retList;
         }
 
+        //Move Nodes Around
+        public void RandomMoveAllNodes()
+        {
+            System.Random r = new System.Random((int)DateTime.Now.Ticks);
+
+            foreach (KeyValuePair<String,Node> Nodes in AllNodes)
+            {
+                Nodes.Value.MoveTo(r.Next(-10,10), r.Next(-10,10), r.Next(0,10));
+            }
+
+        }
+
+
+
         //TODO implement graph traversal DFS, BFS, etc...
+
+
 
 
 

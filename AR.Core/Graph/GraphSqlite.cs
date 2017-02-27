@@ -109,7 +109,6 @@ namespace AR.Core.Graph
 
         }
 
-
         public void addEdges(Edge edge)
         {
             using (SQLiteTransaction tr = m_dbConnection.BeginTransaction())
@@ -269,10 +268,10 @@ namespace AR.Core.Graph
 
             var myData = GetDataTable(selectStatement);
 
-            /* List<Int64> list = (from row in myData.AsEnumerable()
-                                 select row.Field<Int64>("ID")).ToList<Int64>();
-             return list; */
-            return null;
+             /*List<Int64> list = (from row in myData.AsEnumerable()
+                                 select row.Field<Int64>("ID")).ToList<Int64>();*/
+             return null; 
+
         }
         public List<Int64> getNodeList(String selectStatement)
         {
@@ -280,9 +279,9 @@ namespace AR.Core.Graph
             var myData = GetDataTable(selectStatement);
 
             /*List<Int64> list = (from row in myData.AsEnumerable()
-                                select row.Field<Int64>("ID")).ToList<Int64>();
-            return list; */
-            return null;
+                                select row.Field<Int64>("ID")).ToList<Int64>();*/
+            return null; 
+  
         }
 
 

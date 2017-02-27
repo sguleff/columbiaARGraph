@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AR.Core.Graph
 {
-    public class Edge : MonoBehaviour, IUnityVisualProperties
+    public class Edge 
     {
 
         public UInt32 ID { get; set; }
@@ -16,23 +16,14 @@ namespace AR.Core.Graph
         public Node StartNode { get; set; }
         public Node EndNode { get; set; }
 
+        public GameObject myARObject { get; set; }
 
-        //From IUnityVisualProps
-        public Color myColor { get; set; }
-        public Mesh myMesh { get; set; }
-        public Material myMaterial { get; set; }
-        public Vector3 myLocation { get; set; }
-        public Vector3 myRotation { get; set; }
-        public Vector3 myScale { get; set; }
-        public float mySize { get; set; }
-
-
-
-        public Edge()
+        public Edge(GameObject myARObject)
         {
-            ID = ID = Globals.ID_EdgesUsed;
+            ID = Globals.ID_EdgesUsed;
             Globals.ID_EdgesUsed++;
             Properties = new Dictionary<string, object>();
+            this.myARObject = myARObject;
         }
     }
 }

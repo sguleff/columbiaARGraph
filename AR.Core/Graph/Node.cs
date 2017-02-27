@@ -21,6 +21,7 @@ namespace AR.Core.Graph
                 _ID = value;
             }
         }
+        public String UserID { get; set; }
         public Int32 Weight { get; set; }
         public String Label { get; set; }
         public Dictionary<String, System.Object> Properties { get; set; }
@@ -50,12 +51,16 @@ namespace AR.Core.Graph
             }
         }
 
-        public GameObject myARObject;
+        public GameObject myARObject { get; set; }
 
 
-        public Node(GameObject myARObject)
+        public Node(GameObject myARObject, String UserID)
         {
             ID = ++ Globals.ID_NodesUsed;
+            if (UserID == null || UserID == "")
+                UserID = ID.ToString();
+            else
+                this.UserID = UserID;
             Properties = new Dictionary<string, object>();
             EdgesOut = new Dictionary<uint, Edge>();
             EdgesIn = new Dictionary<uint, Edge>();
@@ -65,7 +70,9 @@ namespace AR.Core.Graph
         //Movement of nodes
         public Node MoveTo(Vector3 vec)
         {
-            myARObject.transform.position = vec;
+            var x = new Vector3(0, 0, 0);
+            Vector3.SmoothDamp(myARObject.transform.position, vec, ref x, 2);
+            //myARObject.transform.position = vec;
             return this;
 
         }
