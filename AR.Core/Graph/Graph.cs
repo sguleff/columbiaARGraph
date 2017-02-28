@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-
+using AR.Core.Types;
 
 namespace AR.Core.Graph
 {
@@ -99,7 +99,11 @@ namespace AR.Core.Graph
             GameObject go = Visuals.UnityHelperFunctions.CreateGameObject(Types.GraphProperties.Edge,
                 PrimitiveType.Cube, Visuals.Colors.Green);
 
-            var edge = new Edge(go) { Label = Label };
+            //get the edge locations
+            Vector3 vStart = StartNode.myARObject.transform.position;
+            Vector3 vEnd = EndNode.myARObject.transform.position;
+
+            var edge = new Edge(go, vStart, vEnd) { Label = Label };
             edge.StartNode = StartNode;
             edge.EndNode = EndNode;
             StartNode.EdgesOut.Add(edge.ID, edge);
@@ -150,8 +154,20 @@ namespace AR.Core.Graph
 
             foreach (KeyValuePair<String,Node> Nodes in AllNodes)
             {
-                Nodes.Value.MoveTo(r.Next(-10,10), r.Next(-10,10), r.Next(0,10));
+                Nodes.Value.MoveTo(r.Next(-20,20), r.Next(-20,20), r.Next(0,20));
+
+                /*Nodes.Value.MoveTo(r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_XMIN, GraphConfiguration.GRAPHBOUNDINGBOX_XMAX), 
+                   r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_YMIN, GraphConfiguration.GRAPHBOUNDINGBOX_YMAX),
+                   r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX));*/
             }
+
+            correctEdgeLocations();
+
+        }
+        private void correctEdgeLocations()
+        {
+            foreach (Edge Edge in AllEdges.Values)
+                Edge.RecenterEdges();
 
         }
 

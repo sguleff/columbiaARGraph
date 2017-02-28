@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace AR.Core.Graph
 {
 
-    public class Node 
+    public class Node
     {
         private UInt32 _ID;
         public UInt32 ID
@@ -53,7 +54,6 @@ namespace AR.Core.Graph
 
         public GameObject myARObject { get; set; }
 
-
         public Node(GameObject myARObject, String UserID)
         {
             ID = ++ Globals.ID_NodesUsed;
@@ -72,10 +72,20 @@ namespace AR.Core.Graph
         {
             var x = new Vector3(0, 0, 0);
             Vector3.SmoothDamp(myARObject.transform.position, vec, ref x, 2);
+
+
+      
+
             //myARObject.transform.position = vec;
             return this;
 
         }
+
+        private void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public Node MoveDelta(Vector3 vec)
         {
             var curLoc = myARObject.transform.position;
