@@ -27,6 +27,10 @@ namespace AR.Core.Graph
         public String Label { get; set; }
         public Dictionary<String, System.Object> Properties { get; set; }
 
+        public Boolean isVisited;
+        public Vector3 Position { get { return myARObject.transform.position; } set { myARObject.transform.position = value; } }
+        public Vector3 cuyrrentForceVector;
+
         public Dictionary<UInt32, Edge> EdgesIn
         {
             get
@@ -56,6 +60,7 @@ namespace AR.Core.Graph
 
         public Node(GameObject myARObject, String UserID)
         {
+            isVisited = false;
             ID = ++ Globals.ID_NodesUsed;
             if (UserID == null || UserID == "")
                 UserID = ID.ToString();
@@ -67,14 +72,32 @@ namespace AR.Core.Graph
             this.myARObject = myARObject;
         }
 
+
+        public Boolean isDirectConnected(Node n)
+        {
+            foreach (Edge ed in EdgesIn.Values)
+            {
+                if (ed.StartNode.ID == n.ID)
+                    return true;
+            }
+            foreach (Edge ed in EdgesOut.Values)
+            {
+                if (ed.EndNode.ID == n.ID)
+                    return true;
+            }
+
+            return false;   
+        }
+
+
         //Movement of nodes
         public Node MoveTo(Vector3 vec)
         {
             var x = new Vector3(0, 0, 0);
-            Vector3.SmoothDamp(myARObject.transform.position, vec, ref x, 2);
+            //Vector3.SmoothDamp(myARObject.transform.position, vec, ref x, 2);
+            myARObject.transform.position = vec;
+            CleanEdges();
 
-
-      
 
             //myARObject.transform.position = vec;
             return this;
@@ -90,9 +113,12 @@ namespace AR.Core.Graph
         {
             var curLoc = myARObject.transform.position;
             myARObject.transform.position = new Vector3(vec.x + curLoc.x, vec.y + curLoc.y, vec.z + curLoc.z);
+            CleanEdges();
             return this;
 
         }
+
+
         public Node Scale(Vector3 vec)
         {
             myARObject.transform.localScale = vec;
@@ -102,17 +128,12 @@ namespace AR.Core.Graph
         public Node MoveTo(float x, float y, float z)
         {
             Vector3 vec = new Vector3(x, y, z);
-            myARObject.transform.position = vec;
-            return this;
-
+            return MoveTo(vec);
         }
         public Node MoveDelta(float x, float y, float z)
         {
             Vector3 vec = new Vector3(x, y, z);
-            var curLoc = myARObject.transform.position;
-            myARObject.transform.position = new Vector3(vec.x + curLoc.x, vec.y + curLoc.y, vec.z + curLoc.z);
-            return this;
-
+            return MoveDelta(vec);
         }
         public Node Scale(float x, float y, float z)
         {
@@ -137,6 +158,14 @@ namespace AR.Core.Graph
         {
             myARObject.GetComponent<MeshRenderer>().material.color = c;
             return this;
+        }
+
+        private void CleanEdges()
+        {
+            foreach (Edge Edge in EdgesIn.Values)
+                Edge.RecenterEdges();
+            foreach (Edge Edge in EdgesOut.Values)
+                Edge.RecenterEdges();
         }
 
     }

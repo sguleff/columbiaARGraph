@@ -24,8 +24,6 @@ namespace AR.Core.Graph
         public Vector3 myScale { get; set; }
         public float mySize { get; set; }
 
-
-
         public Graph()
         {
             AllNodes = new Dictionary<String, Node>();
@@ -148,36 +146,82 @@ namespace AR.Core.Graph
         }
 
         //Move Nodes Around
-        public void RandomMoveAllNodes()
+        public void RandomMoveAllNodes(Boolean in2d)
         {
             System.Random r = new System.Random((int)DateTime.Now.Ticks);
 
-            foreach (KeyValuePair<String,Node> Nodes in AllNodes)
+            foreach (Node Nodes in AllNodes.Values)
             {
-                Nodes.Value.MoveTo(r.Next(-20,20), r.Next(-20,20), r.Next(0,20));
+                var yShift = in2d ? 0 : r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX);
 
-                /*Nodes.Value.MoveTo(r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_XMIN, GraphConfiguration.GRAPHBOUNDINGBOX_XMAX), 
-                   r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_YMIN, GraphConfiguration.GRAPHBOUNDINGBOX_YMAX),
-                   r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX));*/
+                Nodes.MoveTo(r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_XMIN, GraphConfiguration.GRAPHBOUNDINGBOX_XMAX),
+                   yShift, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX)
+                   );
             }
 
-            correctEdgeLocations();
+        }
+
+        public void ForceDirectedGraph(Boolean proj3d)
+        {
+            //Move all nodes around in 2D space x,y -> after force direct project into 3D
+            RandomMoveAllNodes(true);
+            
+            for (int i = GraphConfiguration.FORCE_DIRECTED_ITERATIONS; i > 0; --i)
+            {
+                foreach (Node Nodes in AllNodes.Values)
+                {
+                    foreach (Node Nodes2 in AllNodes.Values)
+                    {
+                        if (Nodes.ID != Nodes2.ID)
+                        {
+                            if (Nodes.isDirectConnected(Nodes2))
+                                Nodes.cuyrrentForceVector += GraphHelperFunctions.CalcAttractionForce(Nodes, Nodes2, GraphConfiguration.FORCE_DIRECTED_SPRING_LEN);
+                            else
+                                if (Nodes.isDirectConnected(Nodes2))
+                                Nodes.cuyrrentForceVector += GraphHelperFunctions.CalcRepulsionForce(Nodes, Nodes2);
+                        }
+                    }
+                }
+
+                //Move all nodes and rest
+                foreach (Node Nodes in AllNodes.Values)
+                {
+                    Nodes.myARObject.transform.position += Nodes.cuyrrentForceVector;
+                    Nodes.cuyrrentForceVector = new Vector3(0, 0, 0);
+                }
+            }
+
+            //Move all nodes around in 2D space x,y -> after force direct project into 3D
+            RandomMoveAllNodes(true);
+
+            //break if we don't project into 3D space
+            if (!proj3d)
+                return;
+
+            System.Random r = new System.Random((int)DateTime.Now.Ticks);
+
+            foreach (Node Nodes in AllNodes.Values)
+            {
+                Nodes.MoveDelta(0, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_YMIN, GraphConfiguration.GRAPHBOUNDINGBOX_YMAX), 0);
+            }
+
+
 
         }
+
+        /// <summary>
+        /// DEPRICATED IMPLEMENTED IN NODE MOVEMENTS
+        /// </summary>
         private void correctEdgeLocations()
         {
+            throw new NotSupportedException();
+
             foreach (Edge Edge in AllEdges.Values)
                 Edge.RecenterEdges();
 
         }
 
-
-
         //TODO implement graph traversal DFS, BFS, etc...
-
-
-
-
 
     }
 
