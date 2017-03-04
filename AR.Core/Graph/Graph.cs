@@ -12,7 +12,7 @@ namespace AR.Core.Graph
     {
         public Dictionary<String, Node> AllNodes { get; set; }
         public Dictionary<UInt32, Edge> AllEdges { get; set; }
-        public GraphSqlite FlatGraph { get; set; }
+        //public GraphSqlite FlatGraph { get; set; }
 
         //From IUnityVisualProps
 
@@ -28,7 +28,7 @@ namespace AR.Core.Graph
         {
             AllNodes = new Dictionary<String, Node>();
             AllEdges = new Dictionary<UInt32, Edge>();
-            FlatGraph = new GraphSqlite();
+            //FlatGraph = new GraphSqlite();
         }
 
 
@@ -42,7 +42,7 @@ namespace AR.Core.Graph
             var node = new Node(go, Label);
 
             AllNodes.Add(node.UserID, node);
-            FlatGraph.addNode(node);
+            //FlatGraph.addNode(node);
             return node;
         }
         public void DeleteNode(String UserID)
@@ -60,7 +60,7 @@ namespace AR.Core.Graph
                 DeleteEdges(ed.Key);
             }
 
-            FlatGraph.deleteNodes(node);
+            //FlatGraph.deleteNodes(node);
             AllNodes.Remove(UserID);
         }
         public Node GetNode(String UserID)
@@ -81,11 +81,11 @@ namespace AR.Core.Graph
         {
 
             var retList = new List<Node>();
-            foreach (var ID in FlatGraph.getNodeList(SelectStatement))
+            /*foreach (var ID in FlatGraph.getNodeList(SelectStatement))
             {
                 retList.Add(GetNode(ID.ToString()));
 
-            }
+            }*/
             return retList;
         }
 
@@ -107,7 +107,7 @@ namespace AR.Core.Graph
             StartNode.EdgesOut.Add(edge.ID, edge);
             EndNode.EdgesIn.Add(edge.ID, edge);
             AllEdges.Add(edge.ID, edge);
-            FlatGraph.addEdges(edge);
+            //FlatGraph.addEdges(edge);
 
             return edge;
         }
@@ -116,7 +116,7 @@ namespace AR.Core.Graph
             var edge = getEdge(ID);
             edge.EndNode.EdgesIn.Remove(ID);
             edge.StartNode.EdgesOut.Remove(ID);
-            FlatGraph.deleteEdges(edge);
+            //FlatGraph.deleteEdges(edge);
             AllEdges.Remove(ID);
         }
         public Edge getEdge(UInt32 ID)
@@ -137,11 +137,11 @@ namespace AR.Core.Graph
         {
 
             var retList = new List<Edge>();
-            foreach (var ID in FlatGraph.getEdgeList(SelectStatement))
+            /*foreach (var ID in FlatGraph.getEdgeList(SelectStatement))
             {
                 retList.Add(getEdge(Convert.ToUInt32(ID)));
 
-            }
+            }*/
             return retList;
         }
 

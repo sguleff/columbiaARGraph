@@ -60,8 +60,11 @@ namespace AR.Core.Graph
 
         public Node(GameObject myARObject, String UserID)
         {
+
+            myARObject.transform.localScale= new Vector3(
+                Types.GraphConfiguration.NODE_DIAMETER, Types.GraphConfiguration.NODE_DIAMETER, Types.GraphConfiguration.NODE_DIAMETER);
             isVisited = false;
-            ID = ++ Globals.ID_NodesUsed;
+            ID = ++Globals.ID_NodesUsed;
             if (UserID == null || UserID == "")
                 UserID = ID.ToString();
             else
