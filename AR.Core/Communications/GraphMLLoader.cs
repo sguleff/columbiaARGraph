@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml;
-
+using AR.Core.Logging;
 #if EMBEDED
 using System.Net;
 #else
@@ -208,6 +208,10 @@ namespace AR.Core.Communications
 
         public static Graph.Graph GetGraphFromURL(String URL)
         {
+            UnityEngine.Debug.LogError("Remote Log Start");
+            //DBLogger.getInstance().LogMessage(Types.LoggingLevels.Verbose, "Pulling Graph from URL: " + URL, "Graph.Graph.GetGraphFromURL");
+            UnityEngine.Debug.LogError("Remote Log Stop");
+
             Graph.Graph retGraph = new Graph.Graph();
 
             try

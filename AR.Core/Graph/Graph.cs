@@ -152,10 +152,11 @@ namespace AR.Core.Graph
 
             foreach (Node Nodes in AllNodes.Values)
             {
-                var yShift = in2d ? 0 : r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX);
+                var yShift = in2d ? 0 : r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN*100, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX*100)/100f;
 
-                Nodes.MoveTo(r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_XMIN, GraphConfiguration.GRAPHBOUNDINGBOX_XMAX),
-                   yShift, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX)
+             
+                Nodes.MoveTo(r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_XMIN*100, GraphConfiguration.GRAPHBOUNDINGBOX_XMAX*100)/100f,
+                   yShift, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_ZMIN*100, GraphConfiguration.GRAPHBOUNDINGBOX_ZMAX*100)/100f
                    );
             }
 
@@ -192,7 +193,7 @@ namespace AR.Core.Graph
             }
 
             //Move all nodes around in 2D space x,y -> after force direct project into 3D
-            RandomMoveAllNodes(true);
+            //RandomMoveAllNodes(true);
 
             //break if we don't project into 3D space
             if (!proj3d)
@@ -202,7 +203,7 @@ namespace AR.Core.Graph
 
             foreach (Node Nodes in AllNodes.Values)
             {
-                Nodes.MoveDelta(0, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_YMIN, GraphConfiguration.GRAPHBOUNDINGBOX_YMAX), 0);
+                Nodes.MoveDelta(0, r.Next(GraphConfiguration.GRAPHBOUNDINGBOX_YMIN * 100, GraphConfiguration.GRAPHBOUNDINGBOX_YMAX * 100) / 100f, 0);
             }
 
 

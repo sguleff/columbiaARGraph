@@ -11,7 +11,7 @@ namespace AR.Core.Speech
     public class SpeechProcessing : MonoBehaviour
     {
         [SerializeField]
-        private string[] m_Keywords;
+        private string[] m_Keywords = { "Dense", "Sparce", "Test", "Badger" };
         private Graph.Graph m_graph;
         private KeywordRecognizer m_Recognizer;
 
@@ -22,7 +22,7 @@ namespace AR.Core.Speech
             m_graph = g;
         }
 
-        void Start()
+        public void Start() 
         {
             m_Recognizer = new KeywordRecognizer(m_Keywords);
             m_Recognizer.OnPhraseRecognized += OnPhraseRecognized;

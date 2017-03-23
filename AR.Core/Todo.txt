@@ -1,0 +1,11 @@
+﻿(M) ARTouch - TBD
+(L) Communications - Read from Neo4j
+(M) Graph - Force directed partially working, SQLite or remove
+(M) HUD - TBD
+IO - Nothing
+(M) Sample Graph - Create graph with more data
+(H) Speach - Graph manipulation around commands 
+Types - Nothing
+Visuals - Nothing
+(H) AR/VR - Clipping and performance, Room Mapping, fixed to table space
+Misc - Geospacial overlayed on map
