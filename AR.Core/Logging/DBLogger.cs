@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Npgsql;
 using AR.Core.Types;
+using UnityEngine.Networking;
 
 namespace AR.Core.Logging
 {
@@ -51,6 +52,45 @@ namespace AR.Core.Logging
             }
             catch(Exception exp)
             {
+                return false;
+            }
+
+        }
+
+    }
+#else
+    public class DBLogger
+    {
+        private String PostURL = "http://" + SystemSetup.DBLog_Server + ":3000/logs"; 
+
+        private static DBLogger instance;
+        private DBLogger() { }
+
+        public static DBLogger getInstance()
+        {
+            if (instance == null)
+                instance = new DBLogger();
+
+            return instance;
+        }
+
+        public Boolean LogMessage(LoggingLevels loglevel, String Message, String Module = "", String Version = "")
+        {
+            try
+            {
+                Dictionary<String, String> myLoad = new Dictionary<string, string>();
+                myLoad.Add("level", loglevel.ToString());
+                myLoad.Add("module", Module);
+                myLoad.Add("message", Message);
+                myLoad.Add("version", Version);
+
+                UnityWebRequest.Post(PostURL, myLoad).Send();  
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                UnityEngine.Debug.LogError(exp.Message);
                 return false;
             }
 

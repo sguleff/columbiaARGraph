@@ -7,6 +7,7 @@ namespace AR.Core.Types
 {
     public static class GraphConfiguration
     {
+ 
         public static BoundryScale plotScale = BoundryScale.Normal;
         public static float scaleFactor
         {
@@ -50,6 +51,12 @@ namespace AR.Core.Types
         public static Int32 FORCE_DIRECTED_ITERATIONS = 75;
         public static float FORCE_DIRECTED_DEFAULT_DAMPING = 0.5f;
         public static Boolean EXTRACT_SAMPLEGRAPHS = true;
+
+
+        public static float TIME_ANIMATION_MOVENODES = 3.0f;
+
+        public static Int32 DEF_DENSE_NODES = 5;
+
 
 
         public static String URL_SAMPLEGRAPH = "http://awesome.cs.jhu.edu/data/static/graphs/cat/mixed.species_brain_1.graphml";
