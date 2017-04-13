@@ -55,7 +55,7 @@ namespace AR.Core.Types
 
         public static float TIME_ANIMATION_MOVENODES = 3.0f;
 
-        public static Int32 DEF_DENSE_NODES = 5;
+        public static Int32 DEF_DENSE_NODES = 1;
 
 
 

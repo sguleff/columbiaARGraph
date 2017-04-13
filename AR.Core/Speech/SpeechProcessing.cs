@@ -11,7 +11,7 @@ namespace AR.Core.Speech
     public class SpeechProcessing : MonoBehaviour
     {
         private Logging.DBLogger myLogs;
-        public string[] m_Keywords = { "Dense", "Sparce", "Test", "Badger", "Reset" };
+        public string[] m_Keywords = { "Dense", "Sparce", "Test", "Badger", "Reset", "Depth First Search" };
         public Graph.Graph m_graph;
         private KeywordRecognizer m_Recognizer;
 
@@ -48,6 +48,11 @@ namespace AR.Core.Speech
                 case "Dense":
                     myLogs.LogMessage(LoggingLevels.Verbose, "OnPhraseRecognized: Updating the Badger Nodes (Test)", Module: "SpeechProcessing.OnPhraseRecognized", Version: "ALPHA");
                     m_graph.ShowDenseNodes();
+                    break;
+                case "Depth First Search":
+                case "badger":
+                    myLogs.LogMessage(LoggingLevels.Verbose, "OnPhraseRecognized: Updating the Badger Nodes (Test)", Module: "SpeechProcessing.OnPhraseRecognized", Version: "ALPHA");
+                    m_graph.DFS();
                     break;
                 case "Reset":
                     myLogs.LogMessage(LoggingLevels.Verbose, "OnPhraseRecognized: Updating the Badger Nodes (Test)", Module: "SpeechProcessing.OnPhraseRecognized", Version: "ALPHA");

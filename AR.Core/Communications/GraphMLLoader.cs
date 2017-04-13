@@ -401,7 +401,5 @@ namespace AR.Core.Communications
 
 #endif
 
-
-
     }
 }

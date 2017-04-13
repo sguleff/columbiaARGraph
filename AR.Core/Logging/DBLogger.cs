@@ -76,8 +76,16 @@ namespace AR.Core.Logging
 
         public Boolean LogMessage(LoggingLevels loglevel, String Message, String Module = "", String Version = "")
         {
+
+            //don't post remote logs if running in prod only for debugging
+            if (!SystemSetup.ENABLE_REMOTE_LOGGING)
+                return true;
+
             try
             {
+                
+
+
                 Dictionary<String, String> myLoad = new Dictionary<string, string>();
                 myLoad.Add("level", loglevel.ToString());
                 myLoad.Add("module", Module);

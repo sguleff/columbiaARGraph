@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -28,7 +29,6 @@ namespace AR.Core.Graph
         public Vector3 myRotation { get; set; }
         public Vector3 myScale { get; set; }
         public float mySize { get; set; }
-
 
         public Graph()
         {
@@ -74,7 +74,10 @@ namespace AR.Core.Graph
         }
         public Node GetNode(String UserID)
         {
-            return AllNodes[UserID];
+            if (AllNodes.ContainsKey(UserID))
+                return AllNodes[UserID];
+            else
+                return null;
         }
         public List<Node> GetNodes(List<String> UserIDS)
         {
@@ -193,7 +196,8 @@ namespace AR.Core.Graph
                 //Move all nodes and rest
                 foreach (Node Nodes in AllNodes.Values)
                 {
-                    Nodes.myARObject.transform.position += Nodes.cuyrrentForceVector;
+                    Nodes.MoveDelta(Nodes.cuyrrentForceVector);
+                    //Nodes.myARObject.transform.position += Nodes.cuyrrentForceVector;
                     Nodes.cuyrrentForceVector = new Vector3(0, 0, 0);
                 }
             }
@@ -247,13 +251,18 @@ namespace AR.Core.Graph
                     continue;
                 }
 
-                n.ChangeNodeColor(Visuals.Colors.Green_P25);
+
+                n.HideNode();
+                foreach (Edge e in n.EdgesIn.Values)
+                    e.HideEdge();
+                foreach (Edge e in n.EdgesOut.Values)
+                    e.HideEdge();
+
+                /*n.ChangeNodeColor(Visuals.Colors.Green_P25);
                 foreach (Edge e in n.EdgesIn.Values)
                     e.ChangeEdgeColor(Visuals.Colors.Blue_P25);
                 foreach (Edge e in n.EdgesOut.Values)
-                    e.ChangeEdgeColor(Visuals.Colors.Blue_P25);
-
-
+                    e.ChangeEdgeColor(Visuals.Colors.Blue_P25);*/
             }
 
 
@@ -266,14 +275,14 @@ namespace AR.Core.Graph
             {
 
                 n.ChangeNodeColor(Visuals.Colors.Blue);
-              
+                n.ShowNode();
             }
 
             foreach (Edge e in AllEdges.Values)
             {
 
                 e.ChangeEdgeColor(Visuals.Colors.Green);
-
+                e.ShowEdge();
             }
 
         }
@@ -293,15 +302,83 @@ namespace AR.Core.Graph
         }
 
         //TODO implement graph traversal DFS, BFS, etc...
+        private void DFSVisit(Node node)
+        {
+            node.isVisited = true;
+
+            foreach (var e in node.EdgesOut)
+            {
+                var edge = e.Value;
+
+                if (edge.EndNode.isVisited)
+                    continue;
+
+                edge.EndNode.isVisited = true;
+
+                //change color slowly here
+                EnumeratorRunning = true;
+                StartCoroutine(ChangeNodeColorWait(edge)); //Change Color and delay a little for effect
+                StartCoroutine(BlockOn()); //wait until first Coroutine stops then continue
+
+
+                DFSVisit(edge.EndNode);
+            }
+        }
+        public void DFS()
+        {
+            //reset all nodes to not visited
+            foreach (var n in AllNodes)
+            {
+                n.Value.isVisited = false;
+                n.Value.ChangeNodeColor(Visuals.Colors.Black);
+                n.Value.HideNode();
+            }
+            foreach (var e in AllEdges)
+            {
+                e.Value.HideEdge();
+                e.Value.HideEdge();
+                e.Value.ChangeEdgeColor(Visuals.Colors.Black);
+
+            }
+
+
+
+            var node = AllNodes.First().Value;
+            StartCoroutine(DepthFirstSearchNodeVisit(node));
+
+            /*foreach (var n in AllNodes)
+            {
+                if (!n.Value.isVisited)
+                    StartCoroutine(DepthFirstSearchNodeVisit(n.Value));
+                    //DFSVisit(n.Value);
+            }*/
+        }
+
+
+        public IEnumerator DepthFirstSearchNodeVisit(Node node)
+        {
+            node.isVisited = true;
+            yield return new WaitForSeconds(2.0f);
+            node.ChangeNodeColor(Visuals.Colors.Red);
+            node.ShowNode();
+            foreach (var e in node.EdgesOut)
+            {
+                var edge = e.Value;
+
+                if (edge.EndNode.isVisited)
+                    continue;
+
+                StartCoroutine(DepthFirstSearchNodeVisit(edge.EndNode));
+                edge.ChangeEdgeColor(Visuals.Colors.Yellow);
+                edge.ShowEdge();
+            }
+        }
 
 
         //Monobehavior methods below
-
-
         private void Awake()
         {
             myLogs.LogMessage(LoggingLevels.Verbose, "Awake Graph Method Called", Module: "Graph.Awake", Version: "ALPHA");
-
         }
 
         // Use this for initialization
@@ -325,6 +402,25 @@ namespace AR.Core.Graph
 
         }
 
+
+        //IEnumerator for moving and changing things
+
+        Boolean EnumeratorRunning;
+        IEnumerator ChangeNodeColorWait(Edge edge)
+        {
+            print("changing color " + edge.ID.ToString());
+            edge.EndNode.ChangeNodeColor(Visuals.Colors.Red);
+            yield return new WaitForSeconds(5.0f);
+            EnumeratorRunning = false;
+            print("changing color done after delay " + edge.ID.ToString());
+
+        }
+        IEnumerator BlockOn()
+        {
+            while (EnumeratorRunning)
+                yield return new WaitForSeconds(.1f);
+            print("unblocked and moving on");
+        }
 
     }
 

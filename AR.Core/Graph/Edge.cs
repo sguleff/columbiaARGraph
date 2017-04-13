@@ -20,6 +20,8 @@ namespace AR.Core.Graph
 
         public GameObject myARObject { get; set; }
 
+        public String Neo4jPath { get; set; }
+
         public Edge()
         {
             myLogs = Logging.DBLogger.getInstance();
@@ -56,7 +58,7 @@ namespace AR.Core.Graph
         }
         public Edge ChangeEdgeColor(Color c)
         {
-            myARObject.GetComponent<MeshRenderer>().material.color = c;
+            myARObject.GetComponent<MeshRenderer>().material.color = c;          
             return this;
         }
         public Edge ChangeEdgeTransparency(float Transparency)
@@ -66,6 +68,16 @@ namespace AR.Core.Graph
             myARObject.GetComponent<MeshRenderer>().material.color = curColor;
             myLogs.LogMessage(ARTypes.LoggingLevels.Verbose, "Changed Transparency to (a):" + myARObject.GetComponent<MeshRenderer>().material.color.a.ToString(), Module: "Edge.ChangeEdgeTransparency", Version: "ALPHA");
 
+            return this;
+        }
+        public Edge HideEdge()
+        {
+            myARObject.GetComponent<MeshRenderer>().enabled = false;
+            return this;
+        }
+        public Edge ShowEdge()
+        {
+            myARObject.GetComponent<MeshRenderer>().enabled = true;
             return this;
         }
 

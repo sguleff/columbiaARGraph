@@ -19,6 +19,7 @@ namespace AR.Core.Visuals
             tmpGo.AddComponent<MeshFilter>();
             tmpGo.AddComponent<MeshRenderer>();
             tmpGo.GetComponent<MeshRenderer>().material.color = color;
+            //tmpGo.GetComponent<MeshRenderer>().material.shader = Shader.Find("Standard");
             return tmpGo;
         }
 
