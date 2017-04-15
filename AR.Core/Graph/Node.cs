@@ -113,6 +113,14 @@ namespace AR.Core.Graph
 
         }
 
+        void GazeEntered()
+        {
+
+            myLogs.LogMessage(ARTypes.LoggingLevels.Verbose, "Node yas GazeEntered", Module: "Node.GazeEntered", Version: "ALPHA");
+
+        }
+
+
         public Boolean isDirectConnected(Node n)
         {
             foreach (Edge ed in EdgesIn.Values)

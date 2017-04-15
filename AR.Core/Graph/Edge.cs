@@ -8,6 +8,7 @@ using ARTypes = AR.Core.Types;
 
 namespace AR.Core.Graph
 {
+
     public class Edge : MonoBehaviour
     {
         private Logging.DBLogger myLogs;
@@ -119,6 +120,13 @@ namespace AR.Core.Graph
 
         private void Update()
         {
+
+        }
+
+        void GazeEntered()
+        {
+
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Edge has GazeEntered", Module: "Edge.GazeEntered", Version: "ALPHA");
 
         }
 

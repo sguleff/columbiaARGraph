@@ -15,73 +15,119 @@ Project:      3D Graph Rendering on Microsoft Hololens
 /// InteractibleManager keeps tracks of which GameObject
 /// is currently in focus.
 /// </summary>
-public class InteractibleManager : Singleton<InteractibleManager>
+/// 
+
+namespace AR.Core.Graph.ARTouch
 {
-    private DBLogger myLogs;
-    public GameObject FocusedGameObject { get; private set; }
-
-    private GameObject oldFocusedGameObject = null;
-
-
-    private void Awake()
+    public class InteractibleManager : Singleton<InteractibleManager>
     {
-        myLogs = AR.Core.Logging.DBLogger.getInstance();
-    }
+        private DBLogger myLogs;
+        public Graph m_graph;
 
 
-    void Start()
-    {
-        myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting GazeManager", "InteractibleManager.Start", "Alpha");
-        FocusedGameObject = null;
-    }
+        public GameObject FocusedGameObject { get; private set; }
 
-    void Update()
-    {
-        oldFocusedGameObject = FocusedGameObject;
+        private GameObject oldFocusedGameObject = null;
 
-        if (GazeManager.Instance.Hit)
+
+        private void Awake()
         {
-            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit", "InteractibleManager.update","Alpha");
+           
+        }
 
-            RaycastHit hitInfo = GazeManager.Instance.HitInfo;
-            if (hitInfo.collider != null)
+
+        void Start()
+        {
+            myLogs = AR.Core.Logging.DBLogger.getInstance();
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting GazeManager", "InteractibleManager.Start", "Alpha");
+            FocusedGameObject = null;
+        }
+
+        void Update()
+        {
+            oldFocusedGameObject = FocusedGameObject;
+
+            if (GazeManager.Instance.Hit)
             {
-                // 2.c: Assign the hitInfo's collider gameObject to the FocusedGameObject.
-                FocusedGameObject = hitInfo.collider.gameObject;
+                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit", "InteractibleManager.update", "Alpha");
+
+
+
+                RaycastHit hitInfo = GazeManager.Instance.HitInfo;
+                if (hitInfo.collider != null)
+                {
+                    // 2.c: Assign the hitInfo's collider gameObject to the FocusedGameObject.
+                    FocusedGameObject = hitInfo.collider.gameObject;
+                }
+                else
+                {
+                    FocusedGameObject = null;
+                }
             }
             else
             {
                 FocusedGameObject = null;
             }
-        }
-        else
-        {
-            FocusedGameObject = null;
-        }
 
-        if (FocusedGameObject != oldFocusedGameObject)
-        {
-            ResetFocusedInteractible();
-            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit (NEW OBJECT)", "InteractibleManager.update", "Alpha");
-            if (FocusedGameObject != null)
+            if (FocusedGameObject != oldFocusedGameObject)
             {
-                if (FocusedGameObject.GetComponent<Interactible>() != null)
+                ResetFocusedInteractible();
+                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit (NEW OBJECT)", "InteractibleManager.update", "Alpha");
+
+                if (m_graph != null)
                 {
-                    // 2.c: Send a GazeEntered message to the FocusedGameObject.
-                    FocusedGameObject.SendMessage("GazeEntered");
+                    var test = "";
+                    var GOName = FocusedGameObject.name;
+                    if (GOName.Contains("Node"))
+                        m_graph.RaiseFeedback(m_graph.RelayNodeProperties(m_graph.AllNodes[GOName]));
+                    if (GOName.Contains("Edge"))
+                        m_graph.RaiseFeedback(m_graph.RelayEdgeProperties(m_graph.AllEdges[System.Convert.ToUInt16(GOName.Split('_')[1])]));
+                    else
+                        test = "NOT FOUND";
+
+                    myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Object Name: " + GOName + " / Found Object: " + test, "InteractibleManager.update", "Alpha");
+
+
+                }
+                else
+                {
+                    //Intentionally blank no graph discovered (Have we init'ed yet)?
+                    myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Where's my Graph At??", "InteractibleManager.update", "Alpha");
+
+
+                }
+
+
+                if (FocusedGameObject != null)
+                {
+                    if (FocusedGameObject.GetComponent<Interactible>() != null)
+                    {
+                        // 2.c: Send a GazeEntered message to the FocusedGameObject.
+                        FocusedGameObject.SendMessage("GazeEntered");
+                    }
                 }
             }
         }
-    }
 
-    private void ResetFocusedInteractible()
-    {
-        if (oldFocusedGameObject != null)
+        void GazeEntered()
         {
-            if (oldFocusedGameObject.GetComponent<Interactible>() != null)
+
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Graph has GazeEntered", Module: "Graph.GazeEntered", Version: "ALPHA");
+
+        }
+
+
+
+
+        private void ResetFocusedInteractible()
+        {
+            if (oldFocusedGameObject != null)
             {
-                // 2.c: Send a GazeExited message to the oldFocusedGameObject.
-                oldFocusedGameObject.SendMessage("GazeExited");
+                if (oldFocusedGameObject.GetComponent<Interactible>() != null)
+                {
+                    // 2.c: Send a GazeExited message to the oldFocusedGameObject.
+                    oldFocusedGameObject.SendMessage("GazeExited");
+                }
             }
         }
     }

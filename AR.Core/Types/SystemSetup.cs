@@ -14,6 +14,7 @@ namespace AR.Core.Types
 
 
         public static Boolean ENABLE_REMOTE_LOGGING = true;
+        public static Boolean ENABLE_PRINT_LOGGING = true;
 
 
         public static String DBLog_Server = "192.168.1.8";

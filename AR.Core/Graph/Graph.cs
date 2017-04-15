@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using AR.Core.Types;
 
+
 namespace AR.Core.Graph
 {
 
@@ -13,6 +14,25 @@ namespace AR.Core.Graph
     {
         private Logging.DBLogger myLogs;
         private Speech.SpeechProcessing mySpeechEngine;
+        private ARTouch.InteractibleManager myInteractibleManager;
+
+
+    
+
+        public event EventHandler<TextArgs> Feedback;
+        public void RaiseFeedback(string p)
+        {
+            EventHandler<TextArgs> handler = Feedback;
+            if (handler != null)
+            {
+                handler(null, new TextArgs(p));
+
+            }
+        }
+
+
+
+        public String LABEL = "ASDEWQ!@#";
 
         //Graph Properties
 
@@ -37,6 +57,7 @@ namespace AR.Core.Graph
             AllEdges = new Dictionary<UInt32, Edge>();
             myLogs = Logging.DBLogger.getInstance();
             myLogs.LogMessage(LoggingLevels.Verbose, "Graph Constructor Called", Module: "Graph.Start", Version: "ALPHA");
+
         }
 
         //this handles all the node select, add, remove commands a user would need
@@ -158,7 +179,6 @@ namespace AR.Core.Graph
         public void RandomMoveAllNodes(Boolean in2d)
         {
             myLogs.LogMessage(LoggingLevels.Verbose, "Starting NodeMovements", Module: "Graph.RandomMoveAllNodes", Version: "ALPHA");
-
             System.Random r = new System.Random((int)DateTime.Now.Ticks);
 
             foreach (Node Nodes in AllNodes.Values)
@@ -288,6 +308,33 @@ namespace AR.Core.Graph
         }
 
 
+        public String RelayNodeProperties(Node n)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Viewing Node " +n.ID.ToString());
+            sb.Append(" Which has " + n.EdgesOut.Count.ToString() + " Outgoing edges and" + n.EdgesIn.Count.ToString() + " incomming edges.");
+            sb.Append("  The node has the following properties ");
+            foreach (var kv in n.Properties)
+            {
+                sb.Append(kv.Key.ToString() + " " + kv.Value.ToString() + ".");
+            }
+            return sb.ToString();
+        }
+
+        public String RelayEdgeProperties(Edge e)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Viewing Edge " + e.ID.ToString());
+            sb.Append(" Which connects nodes " + e.StartNode.UserID.ToString() + " and" + e.EndNode.UserID.ToString() + ".");
+            sb.Append("  The edge has the following properties ");
+            foreach (var kv in e.Properties)
+            {
+                sb.Append(kv.Key.ToString() + " " + kv.Value.ToString() + ".");
+            }
+            return sb.ToString();
+        }
+
+
 
         /// <summary>
         /// DEPRICATED IMPLEMENTED IN NODE MOVEMENTS
@@ -326,6 +373,7 @@ namespace AR.Core.Graph
         }
         public void DFS()
         {
+
             //reset all nodes to not visited
             foreach (var n in AllNodes)
             {
@@ -379,20 +427,38 @@ namespace AR.Core.Graph
         private void Awake()
         {
             myLogs.LogMessage(LoggingLevels.Verbose, "Awake Graph Method Called", Module: "Graph.Awake", Version: "ALPHA");
+
+            //Start the speech Engine here
+            mySpeechEngine = this.gameObject.AddComponent<Speech.SpeechProcessing>();
+            mySpeechEngine.m_graph = this;
+            myInteractibleManager = this.gameObject.AddComponent<ARTouch.InteractibleManager>(); ; //singleton access pattern
+            myInteractibleManager.m_graph = this;
+
+
+            try
+            {
+
+                myLogs.LogMessage(LoggingLevels.Verbose, "Graph Init Speach OKAY" , Module: "Graph.Awake", Version: "ALPHA");
+            }
+            catch (Exception exp)
+            {
+                myLogs.LogMessage(LoggingLevels.Verbose, "Graph Init Speach ERRPR" + exp.Message, Module: "Graph.Awake", Version: "ALPHA");
+            }
+
+
+
+           
         }
+
 
         // Use this for initialization
         void Start()
         {
             myLogs.LogMessage(LoggingLevels.Verbose, "Start Graph Method Called", Module: "Graph.Start", Version: "ALPHA");
-            RandomMoveAllNodes(false);
-
-
-            //Start the speech Engine here
-            mySpeechEngine = this.gameObject.AddComponent<Speech.SpeechProcessing>();
-            mySpeechEngine.m_graph = this;
+            //RandomMoveAllNodes(false);
 
         }
+
 
         // Update is called once per frame
         void Update()

@@ -87,6 +87,7 @@
     <Compile Include="Logging\DBLogger.cs" />
     <Compile Include="Speech\SpeechProcessing.cs" />
     <Compile Include="Types\AREnums.cs" />
+    <Compile Include="Types\CustomEventHandler.cs" />
     <Compile Include="Types\GraphConfiguration.cs" />
     <Compile Include="Types\HelpingFunctions.cs" />
     <Compile Include="Types\Neo4jGraph.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Visuals\BaseShapeFactory.cs" />
     <Compile Include="Visuals\Colors.cs" />
     <Compile Include="Visuals\UnityHelperFunctions.cs" />
+    <Compile Include="Voice\TextToSpeechManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

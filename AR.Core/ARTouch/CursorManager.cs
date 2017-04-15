@@ -5,14 +5,6 @@ Project:      3D Graph Rendering on Microsoft Hololens
 //This is boilerplate code from Miccrosoft and not create by Sam Guleff
 //Attribute this code to Microsoft Acadamy!!
 //https://developer.microsoft.com/en-us/windows/mixed-reality/holograms_210
-
-This source is subject to the MIT License.
-See http://www.microsoft.com/opensource/licenses.mspx#Ms-PL.
-All other rights reserved.
-
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 \***************************************************************************/
 using UnityEngine;
 namespace AR.Core.Graph.ARTouch
