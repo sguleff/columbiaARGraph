@@ -111,7 +111,6 @@ Module: "Neo4jConnector.Neo4jConnector", Version: "ALPHA");
                     //intentionally blank
                 }
 
-
                 results = www.text;
             }
             catch (Exception exp)
@@ -124,6 +123,35 @@ Module: "Neo4jConnector.Neo4jConnector", Version: "ALPHA");
             return results;
 
         }
+
+
+        public String GetNodeProperties(String NodeId)
+        {
+            var zzz = Neo4jConnector.Get(String.Format("http://192.168.1.8:7474/db/data/node/{0}/properties/",NodeId));
+
+            while (!zzz.isDone)
+            {
+                //intentionally blank
+            }
+
+            return zzz.text;
+
+        }
+        public String GetEdgeProperties(String EdgeId)
+        {
+            var zzz = Neo4jConnector.Get(String.Format("http://192.168.1.8:7474/db/data/relationship/{0}/", EdgeId));
+
+            while (!zzz.isDone)
+            {
+                //intentionally blank
+            }
+
+            return zzz.text;
+
+        }
+
+
+        
 
         public Neo4jGraph_SimpleJson CypherQueryReturnGraph(String Query)
         {

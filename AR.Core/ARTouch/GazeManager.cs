@@ -7,7 +7,7 @@ Project:      3D Graph Rendering on Microsoft Hololens
 //https://developer.microsoft.com/en-us/windows/mixed-reality/holograms_210
 \***************************************************************************/
 using UnityEngine;
-
+using AR.Core.Logging;
 
 namespace AR.Core.Graph.ARTouch
 {
@@ -16,6 +16,8 @@ namespace AR.Core.Graph.ARTouch
     /// </summary>
     public class GazeManager : Singleton<GazeManager>
     {
+        private DBLogger myLogs;
+
         [Tooltip("Maximum gaze distance for calculating a hit.")]
         public float MaxGazeDistance = 5.0f;
 
@@ -47,6 +49,13 @@ namespace AR.Core.Graph.ARTouch
         private Vector3 gazeOrigin;
         private Vector3 gazeDirection;
 
+        private void Start()
+        {
+            myLogs = AR.Core.Logging.DBLogger.getInstance();
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting GazeManager", "GazeManager.Start", "Alpha");
+        }
+
+
         void Awake()
         {
             /* TODO: DEVELOPER CODING EXERCISE 3.a */
@@ -57,6 +66,11 @@ namespace AR.Core.Graph.ARTouch
 
         private void Update()
         {
+
+            //myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Update GazeManager: " + Camera.main.transform.forward.x.ToString() 
+            //    + "/" + Camera.main.transform.forward.y.ToString() + "/" + Camera.main.transform.forward.z.ToString(), "GazeManager.update", "Alpha");
+
+
             // 2.a: Assign Camera's main transform position to gazeOrigin.
             gazeOrigin = Camera.main.transform.position;
 

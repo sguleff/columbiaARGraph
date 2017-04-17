@@ -39,7 +39,7 @@ namespace AR.Core.Graph.ARTouch
         void Start()
         {
             myLogs = AR.Core.Logging.DBLogger.getInstance();
-            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting GazeManager", "InteractibleManager.Start", "Alpha");
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting InteractibleManager", "InteractibleManager.Start", "Alpha");
             FocusedGameObject = null;
         }
 
@@ -49,7 +49,7 @@ namespace AR.Core.Graph.ARTouch
 
             if (GazeManager.Instance.Hit)
             {
-                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit", "InteractibleManager.update", "Alpha");
+                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "InteractibleManager.Instance.Hit", "InteractibleManager.update", "Alpha");
 
 
 
@@ -72,16 +72,31 @@ namespace AR.Core.Graph.ARTouch
             if (FocusedGameObject != oldFocusedGameObject)
             {
                 ResetFocusedInteractible();
-                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GazeManager.Instance.Hit (NEW OBJECT)", "InteractibleManager.update", "Alpha");
+                myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "InteractibleManager.Instance.Hit (NEW OBJECT)", "InteractibleManager.update", "Alpha");
 
                 if (m_graph != null)
                 {
                     var test = "";
                     var GOName = FocusedGameObject.name;
                     if (GOName.Contains("Node"))
-                        m_graph.RaiseFeedback(m_graph.RelayNodeProperties(m_graph.AllNodes[GOName]));
+                    {
+                   
+
+                        Node node = m_graph.AllNodes[GOName.Split('_')[1]];
+
+                        myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Looking up Node info: " + node.UserID, "InteractibleManager.update", "Alpha");
+
+
+                        string Message = AR.Core.Voice.VoiceManager.RelayNodeProperties(node);
+                        m_graph.RaiseFeedback(Message);
+                    }
                     if (GOName.Contains("Edge"))
-                        m_graph.RaiseFeedback(m_graph.RelayEdgeProperties(m_graph.AllEdges[System.Convert.ToUInt16(GOName.Split('_')[1])]));
+                    {
+
+                        Edge edge = m_graph.AllEdges[System.Convert.ToUInt16(GOName.Split('_')[1])];
+                        string Message = AR.Core.Voice.VoiceManager.RelayEdgeProperties(edge);
+                        m_graph.RaiseFeedback(Message);
+                    }
                     else
                         test = "NOT FOUND";
 
@@ -115,9 +130,6 @@ namespace AR.Core.Graph.ARTouch
             myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Graph has GazeEntered", Module: "Graph.GazeEntered", Version: "ALPHA");
 
         }
-
-
-
 
         private void ResetFocusedInteractible()
         {

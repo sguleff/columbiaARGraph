@@ -7,15 +7,28 @@ Project:      3D Graph Rendering on Microsoft Hololens
 //https://developer.microsoft.com/en-us/windows/mixed-reality/holograms_210
 \***************************************************************************/
 using UnityEngine;
+using AR.Core.Logging;
+
+
 namespace AR.Core.Graph.ARTouch
 {
     public class CursorManager : Singleton<CursorManager>
     {
+        private DBLogger myLogs;
+
         [Tooltip("Drag the Cursor object to show when it hits a hologram.")]
         public GameObject CursorOnHolograms;
 
         [Tooltip("Drag the Cursor object to show when it does not hit a hologram.")]
         public GameObject CursorOffHolograms;
+
+
+        public CursorManager()
+        {
+            myLogs = AR.Core.Logging.DBLogger.getInstance();
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting CursorManager", "CursorManager.Constructor", "Alpha");
+
+        }
 
         void Awake()
         {
@@ -31,6 +44,10 @@ namespace AR.Core.Graph.ARTouch
 
         void Update()
         {
+
+
+
+
 
             if (GazeManager.Instance == null || CursorOnHolograms == null || CursorOffHolograms == null)
             {

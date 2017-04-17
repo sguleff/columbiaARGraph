@@ -68,8 +68,16 @@ namespace AR.Core.Graph
             //Overide the default UserID if Label has been provided 
             //This ensures that the lookup from edge to Node matches!!!
             Node node = this.gameObject.AddComponent<Node>();
-            if (Label != "")
-                node.UserID = Label;
+
+
+
+
+            if (Label != "") //added to match node labels to Unity Names
+            {
+                node.Label = Label;
+            }
+            //if (Label != "")
+            //    node.UserID = Label;
 
             AllNodes.Add(node.UserID, node);
             //FlatGraph.addNode(node);
@@ -306,35 +314,6 @@ namespace AR.Core.Graph
             }
 
         }
-
-
-        public String RelayNodeProperties(Node n)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Viewing Node " +n.ID.ToString());
-            sb.Append(" Which has " + n.EdgesOut.Count.ToString() + " Outgoing edges and" + n.EdgesIn.Count.ToString() + " incomming edges.");
-            sb.Append("  The node has the following properties ");
-            foreach (var kv in n.Properties)
-            {
-                sb.Append(kv.Key.ToString() + " " + kv.Value.ToString() + ".");
-            }
-            return sb.ToString();
-        }
-
-        public String RelayEdgeProperties(Edge e)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Viewing Edge " + e.ID.ToString());
-            sb.Append(" Which connects nodes " + e.StartNode.UserID.ToString() + " and" + e.EndNode.UserID.ToString() + ".");
-            sb.Append("  The edge has the following properties ");
-            foreach (var kv in e.Properties)
-            {
-                sb.Append(kv.Key.ToString() + " " + kv.Value.ToString() + ".");
-            }
-            return sb.ToString();
-        }
-
-
 
         /// <summary>
         /// DEPRICATED IMPLEMENTED IN NODE MOVEMENTS

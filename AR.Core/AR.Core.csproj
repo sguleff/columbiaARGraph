@@ -99,6 +99,7 @@
     <Compile Include="Visuals\Colors.cs" />
     <Compile Include="Visuals\UnityHelperFunctions.cs" />
     <Compile Include="Voice\TextToSpeechManager.cs" />
+    <Compile Include="Voice\VoiceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -110,6 +111,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="SQL Scripts\PostgresCreateTableScripts.sql" />
+    <Content Include="UnitySetup.txt" />
     <Content Include="Todo.txt" />
   </ItemGroup>
   <ItemGroup>

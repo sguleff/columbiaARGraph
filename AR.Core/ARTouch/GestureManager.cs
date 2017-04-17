@@ -8,7 +8,7 @@ Project:      3D Graph Rendering on Microsoft Hololens
 \***************************************************************************/
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
-
+using AR.Core.Logging;
 
 //Attribute this code to Microsoft Acadamy!!
 
@@ -21,6 +21,16 @@ namespace AR.Core.Graph.ARTouch
     public class GestureManager : MonoBehaviour
     {
         private GestureRecognizer gestureRecognizer;
+        private DBLogger myLogs;
+
+        public GestureManager()
+        {
+            myLogs = AR.Core.Logging.DBLogger.getInstance();
+            myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "Starting GestureManager", "GestureManager.Constructor", "Alpha");
+        }
+
+
+
 
         void Start()
         {
@@ -33,6 +43,8 @@ namespace AR.Core.Graph.ARTouch
 
                 if (focusedObject != null)
                 {
+                    myLogs.LogMessage(AR.Core.Types.LoggingLevels.Verbose, "GestureManager clicked", "GestureManager.StartedClick", "Alpha");
+
                     focusedObject.SendMessage("OnSelect");
                 }
             };

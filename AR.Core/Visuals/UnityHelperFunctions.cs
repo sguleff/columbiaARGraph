@@ -15,7 +15,9 @@ namespace AR.Core.Visuals
             
 
             GameObject tmpGo = GameObject.CreatePrimitive(unityPrim);
+
             tmpGo.name = myProp.ToString() + "_" + (myID + 1).ToString();
+
             tmpGo.AddComponent<MeshFilter>();
             tmpGo.AddComponent<MeshRenderer>();
             tmpGo.GetComponent<MeshRenderer>().material.color = color;

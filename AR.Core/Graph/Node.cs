@@ -86,7 +86,7 @@ namespace AR.Core.Graph
             EdgesIn = new Dictionary<uint, Edge>();
 
             myLogs.LogMessage(ARTypes.LoggingLevels.Verbose, "Start Node Method Called", Module: "Node.Start", Version: "ALPHA");
-
+            Label = "";
 
         }
 
