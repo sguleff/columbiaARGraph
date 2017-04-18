@@ -70,7 +70,13 @@ namespace AR.Core.Voice
             return sb.ToString();
         }
 
-
+        public static String RelayGraphProperties(Graph.Graph g)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("The Graph shown " + g.LABEL);
+            sb.Append(" has " + g.AllEdges.Count.ToString() + " total edges and " + g.AllNodes.Count.ToString() + " total nodes.");
+            return sb.ToString();
+        }
 
 
     }

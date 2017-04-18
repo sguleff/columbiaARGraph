@@ -76,6 +76,7 @@ namespace AR.Core.Graph.ARTouch
 
                 if (m_graph != null)
                 {
+                    return;
                     var test = "";
                     var GOName = FocusedGameObject.name;
                     if (GOName.Contains("Node"))

@@ -15,24 +15,23 @@ namespace AR.Core.Graph
         private Logging.DBLogger myLogs;
         private Speech.SpeechProcessing mySpeechEngine;
         private ARTouch.InteractibleManager myInteractibleManager;
+        private ARTouch.GestureManager myGestureManager;
+        public Boolean removeSpeach;
 
 
-    
 
         public event EventHandler<TextArgs> Feedback;
         public void RaiseFeedback(string p)
         {
             EventHandler<TextArgs> handler = Feedback;
-            if (handler != null)
+            if (handler != null && !removeSpeach)
             {
                 handler(null, new TextArgs(p));
 
             }
         }
 
-
-
-        public String LABEL = "ASDEWQ!@#";
+        public String LABEL = "Sample Graph";
 
         //Graph Properties
 
@@ -52,7 +51,7 @@ namespace AR.Core.Graph
 
         public Graph()
         {
-          
+            removeSpeach = false;
             AllNodes = new Dictionary<String, Node>();
             AllEdges = new Dictionary<UInt32, Edge>();
             myLogs = Logging.DBLogger.getInstance();
@@ -69,9 +68,6 @@ namespace AR.Core.Graph
             //This ensures that the lookup from edge to Node matches!!!
             Node node = this.gameObject.AddComponent<Node>();
 
-
-
-
             if (Label != "") //added to match node labels to Unity Names
             {
                 node.Label = Label;
@@ -85,9 +81,11 @@ namespace AR.Core.Graph
         }
         public void DeleteNode(String UserID)
         {
-            var node = GetNode(UserID);
-
-            Destroy(node.myARObject);
+             DeleteNode( GetNode(UserID));
+        }
+        public void DeleteNode(Node node)
+        {
+            DestroyImmediate(node.gameObject);
 
             foreach (var ed in node.EdgesIn)
             {
@@ -99,15 +97,28 @@ namespace AR.Core.Graph
             }
 
             //FlatGraph.deleteNodes(node);
-            AllNodes.Remove(UserID);
+            AllNodes.Remove(node.UserID);
         }
         public Node GetNode(String UserID)
         {
-            if (AllNodes.ContainsKey(UserID))
+
+            foreach (Node n in AllNodes.Values)
+            {
+                if (n.Label == UserID)
+                {
+                    return n;
+                }
+            }
+
+            return null;
+
+
+            /*if (AllNodes.ContainsKey(UserID))
                 return AllNodes[UserID];
             else
-                return null;
+                return null;*/
         }
+
         public List<Node> GetNodes(List<String> UserIDS)
         {
             var retList = new List<Node>();
@@ -151,12 +162,18 @@ namespace AR.Core.Graph
         }
         public void DeleteEdges(UInt32 ID)
         {
-            var edge = getEdge(ID);
-            edge.EndNode.EdgesIn.Remove(ID);
-            edge.StartNode.EdgesOut.Remove(ID);
-            //FlatGraph.deleteEdges(edge);
-            AllEdges.Remove(ID);
+            DeleteEdges(getEdge(ID));
         }
+        public void DeleteEdges(Edge edge)
+        {
+            edge.EndNode.EdgesIn.Remove(edge.ID);
+            edge.StartNode.EdgesOut.Remove(edge.ID);
+            //FlatGraph.deleteEdges(edge);
+            AllEdges.Remove(edge.ID);
+            DestroyImmediate(edge.gameObject);
+
+        }
+
         public Edge getEdge(UInt32 ID)
         {
             return AllEdges[ID];
@@ -327,6 +344,41 @@ namespace AR.Core.Graph
 
         }
 
+        public void ReloadGraph(GraphTypes gt )
+        {
+            RaiseFeedback("Has not been implemented yet");
+
+
+
+            //Remove all nodes and edges, wipe lists and reload
+            foreach (Edge e in AllEdges.Values)
+            {
+                e.gameObject.SetActive(false);
+                //DestroyImmediate(e.gameObject);
+            }
+            foreach (Node n in AllNodes.Values)
+            {
+                n.gameObject.SetActive(false);
+                //DestroyImmediate(n.gameObject);
+            }
+            this.AllEdges = new Dictionary<uint, Edge>();
+            this.AllNodes = new Dictionary<string, Node>();
+            switch (gt)
+            {
+                case GraphTypes.Neo4jLocal:
+                    AR.Core.Communications.Neo4jConnector.getInstance().GetGraphFromQuery(this, "MATCH p=()-[r:ORDERS]->() RETURN p LIMIT 100");
+                    break;
+                case GraphTypes.Simple:
+                    AR.Core.Communications.GraphMLGraphFactory.GetGraphFromURL(this, AR.Core.Types.GraphConfiguration.URL_SIMPLEGRAPH);
+                    break;
+                case GraphTypes.Sample:
+                    AR.Core.Communications.GraphMLGraphFactory.GetGraphFromURL(this, AR.Core.Types.GraphConfiguration.URL_SAMPLEGRAPH);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //TODO implement graph traversal DFS, BFS, etc...
         private void DFSVisit(Node node)
         {
@@ -350,7 +402,7 @@ namespace AR.Core.Graph
                 DFSVisit(edge.EndNode);
             }
         }
-        public void DFS()
+        public void BFS()
         {
 
             //reset all nodes to not visited
@@ -371,7 +423,7 @@ namespace AR.Core.Graph
 
 
             var node = AllNodes.First().Value;
-            StartCoroutine(DepthFirstSearchNodeVisit(node));
+            StartCoroutine(BreadthFirstSearchNodeVisit(node));
 
             /*foreach (var n in AllNodes)
             {
@@ -380,9 +432,7 @@ namespace AR.Core.Graph
                     //DFSVisit(n.Value);
             }*/
         }
-
-
-        public IEnumerator DepthFirstSearchNodeVisit(Node node)
+        public IEnumerator BreadthFirstSearchNodeVisit(Node node)
         {
             node.isVisited = true;
             yield return new WaitForSeconds(2.0f);
@@ -395,12 +445,50 @@ namespace AR.Core.Graph
                 if (edge.EndNode.isVisited)
                     continue;
 
-                StartCoroutine(DepthFirstSearchNodeVisit(edge.EndNode));
+                StartCoroutine(BreadthFirstSearchNodeVisit(edge.EndNode));
                 edge.ChangeEdgeColor(Visuals.Colors.Yellow);
                 edge.ShowEdge();
             }
         }
 
+        public void DFS()
+        {
+
+            //reset all nodes to not visited
+            foreach (var n in AllNodes)
+            {
+                n.Value.isVisited = false;
+                n.Value.ChangeNodeColor(Visuals.Colors.Black);
+                n.Value.HideNode();
+            }
+            foreach (var e in AllEdges)
+            {
+                e.Value.HideEdge();
+                e.Value.HideEdge();
+                e.Value.ChangeEdgeColor(Visuals.Colors.Black);
+
+            }
+            var node = AllNodes.First().Value;
+            StartCoroutine(DepthFirstSearchNodeVisit(node));
+        }
+        public IEnumerator DepthFirstSearchNodeVisit(Node node)
+        {
+            node.isVisited = true;
+            yield return new WaitForSeconds(2.0f);
+            node.ChangeNodeColor(Visuals.Colors.Red);
+            node.ShowNode();
+            foreach (var e in node.EdgesOut)
+            {
+                var edge = e.Value;
+
+                if (!edge.EndNode.isVisited)
+                    StartCoroutine(DepthFirstSearchNodeVisit(edge.EndNode));
+
+
+                edge.ChangeEdgeColor(Visuals.Colors.Yellow);
+                edge.ShowEdge();
+            }
+        }
 
         //Monobehavior methods below
         private void Awake()
@@ -412,6 +500,8 @@ namespace AR.Core.Graph
             mySpeechEngine.m_graph = this;
             myInteractibleManager = this.gameObject.AddComponent<ARTouch.InteractibleManager>(); ; //singleton access pattern
             myInteractibleManager.m_graph = this;
+            myGestureManager = this.gameObject.AddComponent<ARTouch.GestureManager>(); ; //singleton access pattern
+            myGestureManager.m_graph = this;
 
 
             try
@@ -429,7 +519,6 @@ namespace AR.Core.Graph
            
         }
 
-
         // Use this for initialization
         void Start()
         {
@@ -438,7 +527,6 @@ namespace AR.Core.Graph
 
         }
 
-
         // Update is called once per frame
         void Update()
         {
@@ -446,7 +534,6 @@ namespace AR.Core.Graph
 
 
         }
-
 
         //IEnumerator for moving and changing things
 

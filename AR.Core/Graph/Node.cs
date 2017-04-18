@@ -179,6 +179,7 @@ namespace AR.Core.Graph
         }
         public Node MoveTo(float x, float y, float z)
         {
+            myLogs.LogMessage(ARTypes.LoggingLevels.Verbose, "Moving Node to x:" + x.ToString() + " y:"+y.ToString() + " z:" +z.ToString(), Module: "Node.GazeEntered", Version: "ALPHA");
             Vector3 vec = new Vector3(x, y, z);
             return MoveTo(vec);
         }

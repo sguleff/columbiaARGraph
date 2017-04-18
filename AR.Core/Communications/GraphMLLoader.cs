@@ -290,9 +290,6 @@ namespace AR.Core.Communications
 
                 }
 
-
-
-
             }
             catch (Exception exp)
             {
