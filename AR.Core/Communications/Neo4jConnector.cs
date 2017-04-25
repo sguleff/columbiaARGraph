@@ -38,7 +38,7 @@ Module: "Neo4jConnector.Neo4jConnector", Version: "ALPHA");
             return instance;
         }
 
-        public void GetGraphFromQuery(Graph.Graph retGraph, String Query)
+        public void GetGraphFromQuery(Graph.Graph retGraph, String Query, Boolean readNodeEdgeProps)
         {
            
             try
@@ -78,9 +78,93 @@ Module: "Neo4jConnector.Neo4jConnector", Version: "ALPHA");
 
                     var nextEdge = retGraph.AddEdges(StartNode, EndNode);
 
+
+                    //get StartNode Properties
+                    String JsonOfProps = AR.Core.Communications.Neo4jConnector.getInstance().GetNodeProperties(StartNode.ID.ToString());
+                    var Nodeprops = AR.Core.IO.SimpleJson.DeserializeObject<Dictionary<String, System.Object>>(JsonOfProps);
+                    foreach (var kv in Nodeprops)
+                    {
+                        Double dblVal = 0;
+                        Int32 intval = 0;
+
+
+                        if (StartNode.Properties.ContainsKey(kv.Key.ToString()))
+                            continue;
+
+                        if (Double.TryParse(kv.Value.ToString(), out dblVal))
+                        {
+                            StartNode.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        if (Int32.TryParse(kv.Value.ToString(), out intval))
+                        {
+                            StartNode.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        StartNode.Properties.Add(kv.Key, kv.Value.ToString());
+                    }
+
+                    //get EndNode Properties
+                    JsonOfProps = AR.Core.Communications.Neo4jConnector.getInstance().GetNodeProperties(EndNode.ID.ToString());
+                    Nodeprops = AR.Core.IO.SimpleJson.DeserializeObject<Dictionary<String, System.Object>>(JsonOfProps);
+                    foreach (var kv in Nodeprops)
+                    {
+                        Double dblVal = 0;
+                        Int32 intval = 0;
+
+                        if (EndNode.Properties.ContainsKey(kv.Key.ToString()))
+                            continue;
+
+                        if (Double.TryParse(kv.Value.ToString(), out dblVal))
+                        {
+                            EndNode.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        if (Int32.TryParse(kv.Value.ToString(), out intval))
+                        {
+                            EndNode.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        EndNode.Properties.Add(kv.Key, kv.Value.ToString());
+                    }
+
+
+
+                    //get EndNode Properties
+                    JsonOfProps = AR.Core.Communications.Neo4jConnector.getInstance().GetNodeProperties(nextEdge.ID.ToString()); 
+                    var Edgeprops = AR.Core.IO.SimpleJson.DeserializeObject<Dictionary<String, System.Object>>(JsonOfProps);
+                    foreach (var kv in Edgeprops)
+                    {
+                        Double dblVal = 0;
+                        Int32 intval = 0;
+
+                        if (nextEdge.Properties.ContainsKey(kv.Key.ToString()))
+                            continue;
+
+                        if (Double.TryParse(kv.Value.ToString(), out dblVal))
+                        {
+                            nextEdge.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        if (Int32.TryParse(kv.Value.ToString(), out intval))
+                        {
+                            nextEdge.Properties.Add(kv.Key, dblVal);
+                            continue;
+                        }
+                        nextEdge.Properties.Add(kv.Key, kv.Value.ToString());
+                    }
+
+
                     //TODO only ripping first element off array
                     if (x.relationships[0].Length > 0)
                         nextEdge.Neo4jPath = x.relationships[0];
+
+
+
+
+
+
+
 
                 }
 

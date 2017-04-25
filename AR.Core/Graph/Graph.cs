@@ -366,7 +366,7 @@ namespace AR.Core.Graph
             switch (gt)
             {
                 case GraphTypes.Neo4jLocal:
-                    AR.Core.Communications.Neo4jConnector.getInstance().GetGraphFromQuery(this, "MATCH p=()-[r:ORDERS]->() RETURN p LIMIT 100");
+                    AR.Core.Communications.Neo4jConnector.getInstance().GetGraphFromQuery(this, "MATCH p=()-[r:ORDERS]->() RETURN p LIMIT 100", true);
                     break;
                 case GraphTypes.Simple:
                     AR.Core.Communications.GraphMLGraphFactory.GetGraphFromURL(this, AR.Core.Types.GraphConfiguration.URL_SIMPLEGRAPH);

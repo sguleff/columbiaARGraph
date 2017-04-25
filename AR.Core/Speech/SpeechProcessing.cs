@@ -17,6 +17,7 @@ namespace AR.Core.Speech
         public Graph.Graph m_graph;
         private KeywordRecognizer m_Recognizer;
 
+
         public SpeechProcessing()
         {
             myLogs = Logging.DBLogger.getInstance();
@@ -31,6 +32,8 @@ namespace AR.Core.Speech
             m_Recognizer = new KeywordRecognizer(m_Keywords);
             m_Recognizer.OnPhraseRecognized += OnPhraseRecognized;
             m_Recognizer.Start();
+
+    
         }
 
         public void Start() 
